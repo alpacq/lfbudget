@@ -1,8 +1,50 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import { api } from "~/utils/api";
+
+const CreateTransactionWizard = () => {
+  const { data: sessionData } = useSession();
+  const user = sessionData?.user;
+
+  if (!user) return null;
+};
 
 export default function Home() {
   const { data: sessionData } = useSession();
+
+  const { data, isLoading } = api.transactions.getAll.useQuery();
+
+  if (!data && isLoading)
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-2xl text-white">Loading...</p>
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => void signOut() : () => void signIn()}
+          >
+            {sessionData ? "Sign out" : "Sign in"}
+          </button>
+        </div>
+      </main>
+    );
+
+  if (!data)
+    return (
+      <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-2xl text-white">
+            Something went wrong
+          </p>
+          <button
+            className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
+            onClick={sessionData ? () => void signOut() : () => void signIn()}
+          >
+            {sessionData ? "Sign out" : "Sign in"}
+          </button>
+        </div>
+      </main>
+    );
 
   return (
     <>
@@ -19,6 +61,17 @@ export default function Home() {
                 <span>Logged in as {sessionData.user?.name}</span>
               )}
             </p>
+            <div className="flex flex-col items-center justify-center gap-4">
+              {sessionData &&
+                data?.map((transaction) => (
+                  <div
+                    key={transaction.id}
+                    className="text-m text-center text-white"
+                  >
+                    {transaction.description} - {transaction.amount.toString()}
+                  </div>
+                ))}
+            </div>
             <button
               className="rounded-full bg-white/10 px-10 py-3 font-semibold text-white no-underline transition hover:bg-white/20"
               onClick={sessionData ? () => void signOut() : () => void signIn()}
