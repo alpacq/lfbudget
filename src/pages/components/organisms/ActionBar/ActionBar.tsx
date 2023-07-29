@@ -1,11 +1,14 @@
 import { signOut } from "next-auth/react";
-import { atom, useAtom } from "jotai";
+import { atom, useSetAtom } from "jotai";
+import NewTransactionModal from "~/pages/components/templates/NewTransactionModal/NewTransactionModal";
 import NewCategoryModal from "~/pages/components/templates/NewCategoryModal/NewCategoryModal";
 
 export const categoryModalAtom = atom<boolean>(false);
+export const transactionModalAtom = atom<boolean>(false);
 
 export default function ActionBar() {
-  const [categoryAtom, setCategoryAtom] = useAtom(categoryModalAtom);
+  const setCategoryAtom = useSetAtom(categoryModalAtom);
+  const setTransactionAtom = useSetAtom(transactionModalAtom);
 
   return (
     <div className="flex w-full flex-row items-center justify-between">
@@ -19,7 +22,10 @@ export default function ActionBar() {
         >
           + New category
         </button>
-        <button className="btn flex h-fit w-fit items-center justify-center gap-4 rounded-2xl bg-rose-700 px-4 py-1 text-left text-2xl font-black text-rose-200 shadow-md">
+        <button
+          className="btn flex h-fit w-fit items-center justify-center gap-4 rounded-2xl bg-rose-700 px-4 py-1 text-left text-2xl font-black text-rose-200 shadow-md"
+          onClick={() => setTransactionAtom(true)}
+        >
           + New transaction
         </button>
         <button
@@ -29,6 +35,7 @@ export default function ActionBar() {
           Sign out
         </button>
       </div>
+      <NewTransactionModal />
       <NewCategoryModal />
     </div>
   );
