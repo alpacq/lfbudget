@@ -1,9 +1,17 @@
 import { Dialog, Switch } from "@headlessui/react";
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useSetAtom } from "jotai";
 import { categoryModalAtom } from "~/pages/components/organisms/ActionBar/ActionBar";
 import { Hanken_Grotesk } from "next/font/google";
+import { api } from "~/utils/api";
+import toast from "react-hot-toast";
+import { categoriesAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
+import type { CategoryWithState } from "~/pages/components/templates/MainDashboard/MainDashboard";
+import { useSession } from "next-auth/react";
+import type { Category } from "@prisma/client";
 
 const savingsAtom = atom<boolean>(false);
+const nameAtom = atom<string>("");
+const limitAtom = atom<string>("0");
 
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
@@ -12,8 +20,37 @@ const hanken = Hanken_Grotesk({
 });
 
 const NewCategoryModal = () => {
+  const { data: sessionData } = useSession();
   const [isOpen, setIsOpen] = useAtom(categoryModalAtom);
   const [isSavings, setIsSavings] = useAtom(savingsAtom);
+  const [name, setName] = useAtom(nameAtom);
+  const [limit, setLimit] = useAtom(limitAtom);
+  const setCategories = useSetAtom(categoriesAtom);
+  const ctx = api.useContext();
+
+  const { mutate } = api.categories.create.useMutation({
+    onSuccess: () => {
+      setIsOpen(false);
+      void ctx.categories.getByUser.invalidate();
+      const { data: newCategories } = api.categories.getByUser.useQuery(
+        sessionData ? sessionData?.user?.id : "0"
+      );
+      const categoriesWithState: CategoryWithState[] = newCategories.map(
+        (category: Category) => {
+          return { category: category, isActive: false };
+        }
+      );
+      setCategories(categoriesWithState);
+    },
+    onError: (e) => {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
+        toast.error(errorMessage[0]);
+      } else {
+        toast.error("Failed to add! Please try again later.");
+      }
+    },
+  });
 
   return (
     <Dialog
@@ -39,6 +76,8 @@ const NewCategoryModal = () => {
               <input
                 className="col-span-2 rounded-xl border border-rose-200 bg-transparent p-2 text-left text-base font-medium text-rose-200 outline-0"
                 placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
               <label className="text-left text-base font-medium text-rose-200">
                 Monthly limit
@@ -46,6 +85,8 @@ const NewCategoryModal = () => {
               <input
                 className="col-span-2 rounded-xl border border-rose-200 bg-transparent p-2 text-left text-base font-medium text-rose-200 outline-0"
                 placeholder="Limit"
+                value={limit}
+                onChange={(e) => setLimit(e.target.value)}
               />
               <label className="text-left text-base font-medium text-rose-200">
                 Is from savings
@@ -66,7 +107,13 @@ const NewCategoryModal = () => {
             </div>
             <button
               className="flex h-fit w-fit items-center justify-center gap-4 self-end rounded-2xl bg-rose-700 px-4 py-1 text-left text-xl font-black text-rose-200 shadow-md"
-              onClick={() => setIsOpen(false)}
+              onClick={() =>
+                mutate({
+                  isSavings,
+                  name,
+                  limit: parseFloat(limit.replace(",", ".")),
+                })
+              }
             >
               Add
             </button>

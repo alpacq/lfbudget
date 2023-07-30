@@ -3,13 +3,44 @@ import LoadingScreen from "~/pages/components/templates/LoadingScreen/LoadingScr
 import ErrorScreen from "~/pages/components/templates/ErrorScreen/ErrorScreen";
 import ActionBar from "~/pages/components/organisms/ActionBar/ActionBar";
 import CategoriesBar from "~/pages/components/organisms/CategoriesBar/CategoriesBar";
+import { useSession } from "next-auth/react";
+import { atom, useSetAtom } from "jotai";
+import type { Category, Transaction } from "@prisma/client";
+
+export type CategoryWithState = { category: Category; isActive: boolean };
+
+export const transactionsAtom = atom<Transaction[]>([]);
+export const categoriesAtom = atom<CategoryWithState[]>([]);
 
 export default function MainDashboard() {
-  const { data, isLoading } = api.transactions.getAll.useQuery();
+  const { data: sessionData } = useSession();
+  const { data: transactions, isLoading: isTransactionsLoading } =
+    api.transactions.getByUser.useQuery(
+      sessionData ? sessionData?.user?.id : "0"
+    );
+  const { data: categories, isLoading: isCategoriesLoading } =
+    api.categories.getByUser.useQuery(
+      sessionData ? sessionData?.user?.id : "0"
+    );
+  const setTransactions = useSetAtom(transactionsAtom);
+  const setCategories = useSetAtom(categoriesAtom);
 
-  if (!data && isLoading) return <LoadingScreen />;
+  if (
+    (!transactions || !categories) &&
+    (isTransactionsLoading || isCategoriesLoading)
+  )
+    return <LoadingScreen />;
 
-  if (!data) return <ErrorScreen />;
+  if (!transactions || !categories) return <ErrorScreen />;
+
+  const categoriesWithState: CategoryWithState[] = categories.map(
+    (category: Category) => {
+      return { category: category, isActive: false };
+    }
+  );
+
+  setTransactions(transactions);
+  setCategories(categoriesWithState);
 
   return (
     <div className="px-26 gap:16 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-32 md:px-52 md:py-24">

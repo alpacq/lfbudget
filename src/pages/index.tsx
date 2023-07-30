@@ -3,13 +3,6 @@ import Head from "next/head";
 import LoginScreen from "~/pages/components/templates/LoginScreen/LoginScreen";
 import MainDashboard from "~/pages/components/templates/MainDashboard/MainDashboard";
 
-// const CreateTransactionWizard = () => {
-//   const { data: sessionData } = useSession();
-//   const user = sessionData?.user;
-//
-//   if (!user) return null;
-// };
-
 export default function Home() {
   const { data: sessionData } = useSession();
 
@@ -22,22 +15,6 @@ export default function Home() {
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center bg-indigo-900">
         {sessionData ? <MainDashboard /> : <LoginScreen />}
-        {/*<p className="text-center text-2xl text-white">*/}
-        {/*  {sessionData && (*/}
-        {/*    <span>Logged in as {sessionData.user?.name}</span>*/}
-        {/*  )}*/}
-        {/*</p>*/}
-        {/*<div className="flex flex-col items-center justify-center gap-4">*/}
-        {/*  {sessionData &&*/}
-        {/*    data?.map((transaction) => (*/}
-        {/*      <div*/}
-        {/*        key={transaction.id}*/}
-        {/*        className="text-m text-center text-white"*/}
-        {/*      >*/}
-        {/*        {transaction.description} - {transaction.amount.toString()}*/}
-        {/*      </div>*/}
-        {/*    ))}*/}
-        {/*</div>*/}
       </main>
     </>
   );

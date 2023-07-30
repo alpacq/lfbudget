@@ -14,4 +14,28 @@ export const categoriesRouter = createTRPCRouter({
 
     return categories;
   }),
+
+  create: protectedProcedure
+    .input(
+      z.object({
+        isSavings: z.boolean(),
+        limit: z.number(),
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const category = await ctx.prisma.category.create({
+        data: {
+          userId,
+          isSavings: input.isSavings,
+          limit: input.limit,
+          name: input.name,
+        },
+      });
+
+      return category;
+    }),
 });
+
+// limit: Prisma.Decimal
