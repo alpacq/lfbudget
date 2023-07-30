@@ -35,12 +35,13 @@ const NewCategoryModal = () => {
       const { data: newCategories } = api.categories.getByUser.useQuery(
         sessionData ? sessionData?.user?.id : "0"
       );
-      const categoriesWithState: CategoryWithState[] = newCategories.map(
-        (category: Category) => {
+      const categoriesWithState: CategoryWithState[] | undefined =
+        newCategories?.map((category: Category) => {
           return { category: category, isActive: false };
-        }
-      );
-      setCategories(categoriesWithState);
+        });
+      if (categoriesWithState !== undefined) {
+        setCategories(categoriesWithState);
+      }
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
