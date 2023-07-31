@@ -1,18 +1,29 @@
+import { useAtom } from "jotai";
+import type { PrimitiveAtom } from "jotai";
+import type { CategoryWithState } from "~/pages/components/templates/MainDashboard/MainDashboard";
+
 export default function CategoryCard(props: {
-  name: string;
-  isActive?: boolean;
-  idx: number;
   isSmall?: boolean;
+  categoryAtom: PrimitiveAtom<CategoryWithState>;
+  remove: () => void;
 }) {
+  const [category, setCategory] = useAtom(props.categoryAtom);
+
   return (
     <div
+      onClick={(e) => {
+        setCategory((oldValue) => ({
+          ...oldValue,
+          isActive: !oldValue.isActive,
+        }));
+      }}
       className={`${
         props.isSmall ? "text-xs font-medium" : "text-xl font-semibold"
       } ${
-        props.isActive ? "bg-rose-400" : "bg-rose-300"
+        category.isActive ? "bg-rose-400" : "bg-rose-300"
       } flex h-fit w-fit cursor-pointer items-center justify-center gap-4 rounded-2xl px-4 py-1 text-left text-indigo-900 shadow-md`}
     >
-      {props.name}
+      {category.category.name}
     </div>
   );
 }
