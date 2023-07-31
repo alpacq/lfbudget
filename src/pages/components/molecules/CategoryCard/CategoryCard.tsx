@@ -17,7 +17,7 @@ export default function CategoryCard({
     <div
       onClick={(e) => {
         setCategory((oldValue) => ({
-          ...oldValue,
+          category: oldValue.category,
           isActive: !oldValue.isActive,
         }));
       }}
