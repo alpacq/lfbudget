@@ -6,11 +6,13 @@ import CategoriesBar from "~/pages/components/organisms/CategoriesBar/Categories
 import { useSession } from "next-auth/react";
 import { atom, useSetAtom } from "jotai";
 import type { Category, Transaction } from "@prisma/client";
+import { splitAtom } from "jotai/utils";
 
 export type CategoryWithState = { category: Category; isActive: boolean };
 
 export const transactionsAtom = atom<Transaction[]>([]);
 export const categoriesAtom = atom<CategoryWithState[]>([]);
+export const categoryAtomsAtom = splitAtom(categoriesAtom);
 
 export default function MainDashboard() {
   const { data: sessionData } = useSession();

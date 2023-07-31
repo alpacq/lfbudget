@@ -5,11 +5,11 @@ import type { CategoryWithState } from "~/pages/components/templates/MainDashboa
 export default function CategoryCard({
   isSmall,
   categoryAtom,
-  remove,
-}: {
+}: // remove,
+{
   isSmall?: boolean;
   categoryAtom: PrimitiveAtom<CategoryWithState>;
-  remove: () => void;
+  // remove: () => void;
 }) {
   const [category, setCategory] = useAtom(categoryAtom);
 

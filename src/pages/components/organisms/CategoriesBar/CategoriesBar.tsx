@@ -1,11 +1,9 @@
 import CategoryCard from "~/pages/components/molecules/CategoryCard/CategoryCard";
 import { useAtom } from "jotai";
-import { categoriesAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
-import { splitAtom } from "jotai/utils";
+import { categoryAtomsAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
 
 export default function CategoriesBar() {
-  const categoryAtomsAtom = splitAtom(categoriesAtom);
-  const [categoryAtoms, dispatch] = useAtom(categoryAtomsAtom);
+  const [categoryAtoms] = useAtom(categoryAtomsAtom);
 
   return (
     <div className="flex w-full flex-row flex-wrap items-start justify-start gap-2">
@@ -13,7 +11,7 @@ export default function CategoriesBar() {
         <CategoryCard
           key={index}
           categoryAtom={categoryAtom}
-          remove={() => dispatch({ type: "remove", atom: categoryAtom })}
+          // remove={() => dispatch({ type: "remove", atom: categoryAtom })}
         />
       ))}
     </div>
