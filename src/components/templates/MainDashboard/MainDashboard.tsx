@@ -45,7 +45,7 @@ export default function MainDashboard() {
   setCategories(categoriesWithState);
 
   return (
-    <div className="px-26 gap:16 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-32 md:px-52 md:py-24">
+    <div className="px-26 gap:12 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-24 md:px-52 md:py-24">
       <ActionBar />
       <CategoriesBar />
     </div>

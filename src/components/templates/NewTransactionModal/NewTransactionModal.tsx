@@ -36,6 +36,11 @@ const NewTransactionModal = () => {
   const { mutate } = api.transactions.create.useMutation({
     onSuccess: () => {
       setIsOpen(false);
+      setIsReturnable(false);
+      setAmount("0");
+      setDescription("");
+      setCategory(null);
+      setTransactionType("Expense");
       void ctx.transactions.getAll.invalidate();
     },
     onError: (e) => {

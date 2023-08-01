@@ -1,13 +1,9 @@
 import { Dialog, Switch } from "@headlessui/react";
-import { atom, useAtom, useSetAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import { categoryModalAtom } from "~/components/organisms/ActionBar/ActionBar";
 import { Hanken_Grotesk } from "next/font/google";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
-import { categoriesAtom } from "~/components/templates/MainDashboard/MainDashboard";
-import type { CategoryWithState } from "~/components/templates/MainDashboard/MainDashboard";
-import { useSession } from "next-auth/react";
-import type { Category } from "@prisma/client";
 
 const savingsAtom = atom<boolean>(false);
 const nameAtom = atom<string>("");
@@ -20,28 +16,19 @@ const hanken = Hanken_Grotesk({
 });
 
 const NewCategoryModal = () => {
-  const { data: sessionData } = useSession();
   const [isOpen, setIsOpen] = useAtom(categoryModalAtom);
   const [isSavings, setIsSavings] = useAtom(savingsAtom);
   const [name, setName] = useAtom(nameAtom);
   const [limit, setLimit] = useAtom(limitAtom);
-  const setCategories = useSetAtom(categoriesAtom);
   const ctx = api.useContext();
 
   const { mutate } = api.categories.create.useMutation({
     onSuccess: () => {
       setIsOpen(false);
+      setName("");
+      setIsSavings(false);
+      setLimit("0");
       void ctx.categories.getByUser.invalidate();
-      const { data: newCategories } = api.categories.getByUser.useQuery(
-        sessionData ? sessionData?.user?.id : "0"
-      );
-      const categoriesWithState: CategoryWithState[] | undefined =
-        newCategories?.map((category: Category) => {
-          return { category: category, isActive: false };
-        });
-      if (categoriesWithState !== undefined) {
-        setCategories(categoriesWithState);
-      }
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;

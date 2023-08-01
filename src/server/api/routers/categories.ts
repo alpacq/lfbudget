@@ -36,6 +36,13 @@ export const categoriesRouter = createTRPCRouter({
 
       return category;
     }),
+
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.category.delete({ where: { id: input } });
+      return input;
+    }),
 });
 
 // limit: Prisma.Decimal
