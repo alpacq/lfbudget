@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Head from "next/head";
-import LoginScreen from "~/pages/components/templates/LoginScreen/LoginScreen";
-import MainDashboard from "~/pages/components/templates/MainDashboard/MainDashboard";
+import LoginScreen from "~/components/templates/LoginScreen/LoginScreen";
+import MainDashboard from "~/components/templates/MainDashboard/MainDashboard";
 
 export default function Home() {
   const { data: sessionData } = useSession();

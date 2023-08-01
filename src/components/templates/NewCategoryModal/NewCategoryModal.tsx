@@ -1,11 +1,11 @@
 import { Dialog, Switch } from "@headlessui/react";
 import { atom, useAtom, useSetAtom } from "jotai";
-import { categoryModalAtom } from "~/pages/components/organisms/ActionBar/ActionBar";
+import { categoryModalAtom } from "~/components/organisms/ActionBar/ActionBar";
 import { Hanken_Grotesk } from "next/font/google";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
-import { categoriesAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
-import type { CategoryWithState } from "~/pages/components/templates/MainDashboard/MainDashboard";
+import { categoriesAtom } from "~/components/templates/MainDashboard/MainDashboard";
+import type { CategoryWithState } from "~/components/templates/MainDashboard/MainDashboard";
 import { useSession } from "next-auth/react";
 import type { Category } from "@prisma/client";
 

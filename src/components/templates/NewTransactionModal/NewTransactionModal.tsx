@@ -1,12 +1,12 @@
 import { Combobox, Dialog, Switch, Transition } from "@headlessui/react";
 import { atom, useAtom, useAtomValue } from "jotai";
-import { transactionModalAtom } from "~/pages/components/organisms/ActionBar/ActionBar";
+import { transactionModalAtom } from "~/components/organisms/ActionBar/ActionBar";
 import { Hanken_Grotesk } from "next/font/google";
 import { Fragment } from "react";
 import Image from "next/image";
 import chevronDown from "~/assets/images/chevronDown.png";
-import { categoriesAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
-import type { CategoryWithState } from "~/pages/components/templates/MainDashboard/MainDashboard";
+import { categoriesAtom } from "~/components/templates/MainDashboard/MainDashboard";
+import type { CategoryWithState } from "~/components/templates/MainDashboard/MainDashboard";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 

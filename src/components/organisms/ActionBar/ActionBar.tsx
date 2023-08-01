@@ -1,7 +1,7 @@
 import { signOut } from "next-auth/react";
 import { atom, useSetAtom } from "jotai";
-import NewTransactionModal from "~/pages/components/templates/NewTransactionModal/NewTransactionModal";
-import NewCategoryModal from "~/pages/components/templates/NewCategoryModal/NewCategoryModal";
+import NewTransactionModal from "~/components/templates/NewTransactionModal/NewTransactionModal";
+import NewCategoryModal from "~/components/templates/NewCategoryModal/NewCategoryModal";
 
 export const categoryModalAtom = atom<boolean>(false);
 export const transactionModalAtom = atom<boolean>(false);

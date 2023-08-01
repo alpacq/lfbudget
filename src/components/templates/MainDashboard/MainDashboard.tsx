@@ -1,8 +1,8 @@
 import { api } from "~/utils/api";
-import LoadingScreen from "~/pages/components/templates/LoadingScreen/LoadingScreen";
-import ErrorScreen from "~/pages/components/templates/ErrorScreen/ErrorScreen";
-import ActionBar from "~/pages/components/organisms/ActionBar/ActionBar";
-import CategoriesBar from "~/pages/components/organisms/CategoriesBar/CategoriesBar";
+import LoadingScreen from "~/components/templates/LoadingScreen/LoadingScreen";
+import ErrorScreen from "~/components/templates/ErrorScreen/ErrorScreen";
+import ActionBar from "~/components/organisms/ActionBar/ActionBar";
+import CategoriesBar from "~/components/organisms/CategoriesBar/CategoriesBar";
 import { useSession } from "next-auth/react";
 import { atom, useSetAtom } from "jotai";
 import type { Category, Transaction } from "@prisma/client";

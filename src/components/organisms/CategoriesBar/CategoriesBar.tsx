@@ -1,6 +1,6 @@
-import CategoryCard from "~/pages/components/molecules/CategoryCard/CategoryCard";
+import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { useAtom } from "jotai";
-import { categoryAtomsAtom } from "~/pages/components/templates/MainDashboard/MainDashboard";
+import { categoryAtomsAtom } from "~/components/templates/MainDashboard/MainDashboard";
 
 export default function CategoriesBar() {
   const [categoryAtoms] = useAtom(categoryAtomsAtom);
