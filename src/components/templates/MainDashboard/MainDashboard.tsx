@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { atom, useSetAtom } from "jotai";
 import type { Category, Transaction } from "@prisma/client";
 import { splitAtom } from "jotai/utils";
+import TransactionsTable from "~/components/organisms/TransactionsTable/TransactionsTable";
 
 export type CategoryWithState = { category: Category; isActive: boolean };
 
@@ -48,6 +49,7 @@ export default function MainDashboard() {
     <div className="px-26 gap:12 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-24 md:px-52 md:py-24">
       <ActionBar />
       <CategoriesBar />
+      <TransactionsTable />
     </div>
   );
 }

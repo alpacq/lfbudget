@@ -45,11 +45,7 @@ export default function CategoriesBar() {
       </div>
       <div className="flex w-full flex-row flex-wrap items-center justify-start gap-2">
         {categoryAtoms.map((categoryAtom, index) => (
-          <CategoryCard
-            key={index}
-            categoryAtom={categoryAtom}
-            // remove={() => dispatch({ type: "remove", atom: categoryAtom })}
-          />
+          <CategoryCard key={index} categoryAtom={categoryAtom} />
         ))}
       </div>
     </div>

@@ -70,6 +70,7 @@ model Transaction {
   amount       Decimal
   description  String
   type         TransactionType @default(EXPENSE)
+  date         DateTime        @db.Date
 
   @@index([userId, categoryId])
 }

@@ -24,6 +24,7 @@ export const transactionsRouter = createTRPCRouter({
         amount: z.number(),
         description: z.string(),
         transactionType: z.string(),
+        date: z.date(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -39,9 +40,17 @@ export const transactionsRouter = createTRPCRouter({
             input.transactionType === "Expense"
               ? TransactionType.EXPENSE
               : TransactionType.INCOME,
+          date: input.date,
         },
       });
 
       return transaction;
+    }),
+
+  delete: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.transaction.delete({ where: { id: input } });
+      return input;
     }),
 });

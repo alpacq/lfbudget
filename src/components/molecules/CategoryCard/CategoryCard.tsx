@@ -5,11 +5,9 @@ import type { CategoryWithState } from "~/components/templates/MainDashboard/Mai
 export default function CategoryCard({
   isSmall,
   categoryAtom,
-}: // remove,
-{
+}: {
   isSmall?: boolean;
   categoryAtom: PrimitiveAtom<CategoryWithState>;
-  // remove: () => void;
 }) {
   const [category, setCategory] = useAtom(categoryAtom);
 

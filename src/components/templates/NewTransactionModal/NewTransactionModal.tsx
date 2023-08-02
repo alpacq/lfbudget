@@ -9,12 +9,15 @@ import { categoriesAtom } from "~/components/templates/MainDashboard/MainDashboa
 import type { CategoryWithState } from "~/components/templates/MainDashboard/MainDashboard";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const returnableAtom = atom<boolean>(false);
 const amountAtom = atom<string>("0");
 const descriptionAtom = atom<string>("");
 const typeAtom = atom<string>("Expense");
 const categoryAtom = atom<CategoryWithState | null>(null);
+const dateAtom = atom<Date>(new Date(Date.now()));
 
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
@@ -28,6 +31,7 @@ const NewTransactionModal = () => {
   const [transactionType, setTransactionType] = useAtom(typeAtom);
   const [category, setCategory] = useAtom(categoryAtom);
   const [amount, setAmount] = useAtom(amountAtom);
+  const [date, setDate] = useAtom(dateAtom);
   const [description, setDescription] = useAtom(descriptionAtom);
   const transactionTypes: string[] = ["Expense", "Income"];
   const categories = useAtomValue(categoriesAtom);
@@ -41,7 +45,7 @@ const NewTransactionModal = () => {
       setDescription("");
       setCategory(null);
       setTransactionType("Expense");
-      void ctx.transactions.getAll.invalidate();
+      void ctx.transactions.getByUser.invalidate();
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -70,7 +74,7 @@ const NewTransactionModal = () => {
             New transaction
           </Dialog.Title>
           <div className="flex w-full flex-col items-center justify-center gap-3">
-            <div className="grid w-full grid-cols-3 grid-rows-5 items-center gap-5 p-0">
+            <div className="relative grid w-full grid-cols-3 grid-rows-6 items-center gap-5 p-0">
               <label className="text-left text-base font-medium text-rose-200">
                 Type
               </label>
@@ -165,6 +169,22 @@ const NewTransactionModal = () => {
                 </div>
               </Combobox>
               <label className="text-left text-base font-medium text-rose-200">
+                Date
+              </label>
+              <div className="col-span-2">
+                <DatePicker
+                  selected={date}
+                  onChange={(d: Date) => setDate(d)}
+                  className="w-full rounded-xl border border-rose-200 bg-indigo-900 p-2 text-left text-base font-medium text-rose-200 outline-0"
+                  calendarClassName="bg-indigo-900"
+                  popperClassName="text-xs font-medium text-rose-200 outline-0"
+                  dayClassName={() => "text-xs font-medium text-rose-200"}
+                  weekDayClassName={() => "text-xs font-medium text-rose-20"}
+                  monthClassName={() => "text-xs font-medium text-rose-200"}
+                  dateFormat="dd/mm/yyyy"
+                />
+              </div>
+              <label className="text-left text-base font-medium text-rose-200">
                 Possible return
               </label>
               <Switch
@@ -192,6 +212,7 @@ const NewTransactionModal = () => {
                   amount: parseFloat(amount.replace(",", ".")),
                   description,
                   transactionType,
+                  date,
                 })
               }
             >
