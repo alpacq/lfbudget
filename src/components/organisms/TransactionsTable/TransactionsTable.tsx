@@ -87,6 +87,32 @@ export default function TransactionsTable() {
               );
             } else return null;
           })}
+          <tr>
+            <td className="py-1 pr-2">SUM</td>
+            <td className="py-1 pr-4" />
+            <td
+              className={`${
+                transactions.reduce(
+                  (a, t) =>
+                    (a =
+                      a + Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
+                  0
+                ) >= 0
+                  ? "text-green-500"
+                  : "text-red-400"
+              } py-1 pr-4`}
+            >
+              {transactions
+                .reduce(
+                  (a, t) =>
+                    (a =
+                      a + Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
+                  0
+                )
+                .toFixed(2)}
+            </td>
+            <td className="py-1 pr-2" />
+          </tr>
         </tbody>
       </table>
     </div>

@@ -178,10 +178,7 @@ const NewTransactionModal = () => {
                   className="w-full rounded-xl border border-rose-200 bg-indigo-900 p-2 text-left text-base font-medium text-rose-200 outline-0"
                   calendarClassName="bg-indigo-900"
                   popperClassName="text-xs font-medium text-rose-200 outline-0"
-                  dayClassName={() => "text-xs font-medium text-rose-200"}
-                  weekDayClassName={() => "text-xs font-medium text-rose-20"}
-                  monthClassName={() => "text-xs font-medium text-rose-200"}
-                  dateFormat="dd/mm/yyyy"
+                  dateFormat="dd/MM/yyyy"
                 />
               </div>
               <label className="text-left text-base font-medium text-rose-200">
