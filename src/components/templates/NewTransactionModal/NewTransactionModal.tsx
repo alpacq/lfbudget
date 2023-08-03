@@ -22,7 +22,7 @@ const dateAtom = atom<Date>(new Date(Date.now()));
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-hanken",
+  variable: "--font-hanken", //
 });
 
 const NewTransactionModal = () => {
