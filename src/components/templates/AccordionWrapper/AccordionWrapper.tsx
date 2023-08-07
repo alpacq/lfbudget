@@ -58,7 +58,7 @@ export default function AccordionWrapper({
                 </span>
                 <Image src={chevronDown} alt="chevron" className="h-5 w-5" />
               </Listbox.Button>
-              <Listbox.Options className="absolute left-6 top-8 z-50 gap-0.5 rounded-xl bg-blue-900">
+              <Listbox.Options className="absolute left-4 top-8 z-50 gap-0.5 rounded-xl bg-blue-900">
                 {months.map((mth) => (
                   <Listbox.Option
                     key={mth?.num}
