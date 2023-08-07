@@ -29,7 +29,7 @@ export const convertNumberToMonth = (num: number): Month | undefined => {
 };
 
 export const monthAtom = atom<Month | undefined>(
-  months[new Date(Date.now()).getMonth() + 1]
+  months[new Date(Date.now()).getMonth()]
 );
 
 export default function AccordionWrapper({
