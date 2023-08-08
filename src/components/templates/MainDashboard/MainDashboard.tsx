@@ -9,6 +9,7 @@ import type { Category, Transaction } from "@prisma/client";
 import { splitAtom } from "jotai/utils";
 import TransactionsTable from "~/components/organisms/TransactionsTable/TransactionsTable";
 import AccordionWrapper from "~/components/templates/AccordionWrapper/AccordionWrapper";
+import { useEffect } from "react";
 
 export type CategoryWithState = { category: Category; isActive: boolean };
 
@@ -29,6 +30,20 @@ export default function MainDashboard() {
   const setTransactions = useSetAtom(transactionsAtom);
   const setCategories = useSetAtom(categoriesAtom);
 
+  useEffect(() => {
+    if (transactions && !isTransactionsLoading) setTransactions(transactions);
+  }, [transactions, isTransactionsLoading, setTransactions]);
+  useEffect(() => {
+    if (categories && !isCategoriesLoading) {
+      const categoriesWithState: CategoryWithState[] = categories.map(
+        (category: Category) => {
+          return { category: category, isActive: false };
+        }
+      );
+      setCategories(categoriesWithState);
+    }
+  }, [categories, isCategoriesLoading, setCategories]);
+
   if (
     (!transactions || !categories) &&
     (isTransactionsLoading || isCategoriesLoading)
@@ -37,21 +52,15 @@ export default function MainDashboard() {
 
   if (!transactions || !categories) return <ErrorScreen />;
 
-  const categoriesWithState: CategoryWithState[] = categories.map(
-    (category: Category) => {
-      return { category: category, isActive: false };
-    }
-  );
-
-  setTransactions(transactions);
-  setCategories(categoriesWithState);
-
   return (
     <div className="px-26 gap:12 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-24 md:px-52 md:py-24">
       <ActionBar />
       <CategoriesBar />
       <AccordionWrapper>
         <TransactionsTable />
+      </AccordionWrapper>
+      <AccordionWrapper isYear>
+        <TransactionsTable isYear />
       </AccordionWrapper>
     </div>
   );

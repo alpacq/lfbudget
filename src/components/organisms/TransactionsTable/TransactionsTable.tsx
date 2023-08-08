@@ -8,11 +8,15 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { yearAtom } from "~/components/molecules/Listbox/YearListbox";
+import { monthAtom } from "~/components/molecules/Listbox/MonthListbox";
 
-export default function TransactionsTable() {
+export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
   const transactions = useAtomValue(transactionsAtom);
   const categories = useAtomValue(categoriesAtom);
   const categoryAtoms = useAtomValue(categoryAtomsAtom);
+  const year = useAtomValue(yearAtom);
+  const month = useAtomValue(monthAtom);
   const ctx = api.useContext();
 
   const { mutate } = api.transactions.delete.useMutation({
@@ -29,6 +33,24 @@ export default function TransactionsTable() {
     },
   });
 
+  const filteredTransactions = () => {
+    return categories.some((c) => c.isActive)
+      ? transactions.filter(
+          (t) =>
+            categories.find((c) => c.category.id === t.categoryId)?.isActive &&
+            (isYear
+              ? t.date.getFullYear() === year
+              : t.date.getMonth() + 1 === month?.num &&
+                t.date.getFullYear() === year)
+        )
+      : transactions.filter((t) =>
+          isYear
+            ? t.date.getFullYear() === year
+            : t.date.getMonth() + 1 === month?.num &&
+              t.date.getFullYear() === year
+        );
+  };
+
   return (
     <div className="flex w-1/3 flex-col items-center justify-center gap-2 py-2">
       <table className="w-full table-fixed">
@@ -41,161 +63,71 @@ export default function TransactionsTable() {
           </tr>
         </thead>
         <tbody className="text-left text-xs font-medium text-rose-200">
-          {categories.some((c) => c.isActive)
-            ? transactions
-                .filter(
-                  (t) =>
-                    categories.find((c) => c.category.id === t.categoryId)
-                      ?.isActive
+          {filteredTransactions().map((transaction) => {
+            const categoryAtom =
+              categoryAtoms[
+                categories.findIndex(
+                  (c) => c.category.id === transaction.categoryId
                 )
-                .map((transaction) => {
-                  const categoryAtom =
-                    categoryAtoms[
-                      categories.findIndex(
-                        (c) => c.category.id === transaction.categoryId
-                      )
-                    ];
-                  const amount = transaction.amount.toString();
-                  if (categoryAtom) {
-                    return (
-                      <tr key={transaction.id}>
-                        <td className="py-1 pr-2">{transaction.description}</td>
-                        <td className="py-1 pr-4">
-                          <CategoryCard
-                            isSmall
-                            categoryAtom={categoryAtom}
-                            // remove={() => dispatch({ type: "remove", atom: categoryAtom })}
-                          />
-                        </td>
-                        <td
-                          className={`${
-                            transaction.type === "EXPENSE"
-                              ? "text-red-400"
-                              : "text-green-500"
-                          } py-1 pr-4`}
-                        >
-                          {transaction.type === "EXPENSE" ? "-" : "+"}
-                          {amount.includes(".") ? amount : amount + ".00"}
-                        </td>
-                        <td className="py-1 pr-2">
-                          <button
-                            className="inset-y-0 right-0 flex items-center pr-2"
-                            onClick={() => {
-                              mutate(transaction.id);
-                            }}
-                          >
-                            <TrashIcon
-                              className="w-5s h-5 text-rose-200"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  } else return null;
-                })
-            : transactions.map((transaction) => {
-                const categoryAtom =
-                  categoryAtoms[
-                    categories.findIndex(
-                      (c) => c.category.id === transaction.categoryId
-                    )
-                  ];
-                const amount = transaction.amount.toString();
-                if (categoryAtom) {
-                  return (
-                    <tr key={transaction.id}>
-                      <td className="py-1 pr-2">{transaction.description}</td>
-                      <td className="py-1 pr-4">
-                        <CategoryCard
-                          isSmall
-                          categoryAtom={categoryAtom}
-                          // remove={() => dispatch({ type: "remove", atom: categoryAtom })}
-                        />
-                      </td>
-                      <td
-                        className={`${
-                          transaction.type === "EXPENSE"
-                            ? "text-red-400"
-                            : "text-green-500"
-                        } py-1 pr-4`}
-                      >
-                        {transaction.type === "EXPENSE" ? "-" : "+"}
-                        {amount.includes(".") ? amount : amount + ".00"}
-                      </td>
-                      <td className="py-1 pr-2">
-                        <button
-                          className="inset-y-0 right-0 flex items-center pr-2"
-                          onClick={() => {
-                            mutate(transaction.id);
-                          }}
-                        >
-                          <TrashIcon
-                            className="w-5s h-5 text-rose-200"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                } else return null;
-              })}
+              ];
+            const amount = transaction.amount.toString();
+            if (categoryAtom) {
+              return (
+                <tr key={transaction.id}>
+                  <td className="py-1 pr-2">{transaction.description}</td>
+                  <td className="py-1 pr-4">
+                    <CategoryCard isSmall categoryAtom={categoryAtom} />
+                  </td>
+                  <td
+                    className={`${
+                      transaction.type === "EXPENSE"
+                        ? "text-red-400"
+                        : "text-green-500"
+                    } py-1 pr-4`}
+                  >
+                    {transaction.type === "EXPENSE" ? "-" : "+"}
+                    {amount.includes(".") ? amount : amount + ".00"}
+                  </td>
+                  <td className="py-1 pr-2">
+                    <button
+                      className="inset-y-0 right-0 flex items-center pr-2"
+                      onClick={() => {
+                        mutate(transaction.id);
+                      }}
+                    >
+                      <TrashIcon
+                        className="w-5s h-5 text-rose-200"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              );
+            } else return null;
+          })}
           <tr>
             <td className="py-1 pr-2">SUM</td>
             <td className="py-1 pr-4" />
             <td
               className={`${
-                categories.some((c) => c.isActive)
-                  ? transactions
-                      .filter(
-                        (t) =>
-                          categories.find((c) => c.category.id === t.categoryId)
-                            ?.isActive
-                      )
-                      .reduce(
-                        (a, t) =>
-                          (a =
-                            a +
-                            Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
-                        0
-                      ) >= 0
-                    ? "text-green-500"
-                    : "text-red-400"
-                  : transactions.reduce(
-                      (a, t) =>
-                        (a =
-                          a +
-                          Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
-                      0
-                    ) >= 0
+                filteredTransactions().reduce(
+                  (a, t) =>
+                    (a =
+                      a + Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
+                  0
+                ) >= 0
                   ? "text-green-500"
                   : "text-red-400"
               } py-1 pr-4`}
             >
-              {categories.some((c) => c.isActive)
-                ? transactions
-                    .filter(
-                      (t) =>
-                        categories.find((c) => c.category.id === t.categoryId)
-                          ?.isActive
-                    )
-                    .reduce(
-                      (a, t) =>
-                        (a =
-                          a +
-                          Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
-                      0
-                    )
-                    .toFixed(2)
-                : transactions
-                    .reduce(
-                      (a, t) =>
-                        (a =
-                          a +
-                          Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
-                      0
-                    )
-                    .toFixed(2)}
+              {filteredTransactions()
+                .reduce(
+                  (a, t) =>
+                    (a =
+                      a + Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
+                  0
+                )
+                .toFixed(2)}
             </td>
             <td className="py-1 pr-2" />
           </tr>
