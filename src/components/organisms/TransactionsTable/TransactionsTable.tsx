@@ -52,7 +52,7 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
   };
 
   return (
-    <div className="flex w-1/3 flex-col items-center justify-center gap-2 py-2">
+    <div className="h-max-96 flex w-1/3 flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden py-2">
       <table className="w-full table-fixed">
         <thead className="w-full text-left text-base font-medium text-rose-200">
           <tr>

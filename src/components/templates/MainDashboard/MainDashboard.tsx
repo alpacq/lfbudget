@@ -10,6 +10,7 @@ import { splitAtom } from "jotai/utils";
 import TransactionsTable from "~/components/organisms/TransactionsTable/TransactionsTable";
 import AccordionWrapper from "~/components/templates/AccordionWrapper/AccordionWrapper";
 import { useEffect } from "react";
+import ExpenseIncomeChart from "~/components/organisms/ExpenseIncomeChart/ExpenseIncomeChart";
 
 export type CategoryWithState = { category: Category; isActive: boolean };
 
@@ -57,9 +58,11 @@ export default function MainDashboard() {
       <ActionBar />
       <CategoriesBar />
       <AccordionWrapper>
+        <ExpenseIncomeChart />
         <TransactionsTable />
       </AccordionWrapper>
       <AccordionWrapper isYear>
+        <ExpenseIncomeChart isYear />
         <TransactionsTable isYear />
       </AccordionWrapper>
     </div>
