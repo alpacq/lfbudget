@@ -1,7 +1,8 @@
 import type { Transaction } from "@prisma/client";
 import type { CategoryWithState, Month } from "~/utils/customTypes";
 import type { TransactionType } from ".prisma/client";
-import { ChartData } from "~/utils/customTypes";
+import type { ChartData } from "~/utils/customTypes";
+import { months } from "~/utils/collections";
 
 export const filterTransactions = (
   categories: CategoryWithState[],
@@ -53,7 +54,7 @@ export const prepareChartDataDaily = (
     for (let i = 1; i <= month.numDays; i++) {
       const date: Date = new Date(year, month.num - 1, i);
       const newChartData: ChartData = {
-        date: date,
+        date: i.toString(),
         expense: filterTransactionsByType(preFiltered, "EXPENSE").reduce(
           (a, t) =>
             isCumulative
@@ -98,9 +99,9 @@ export const prepareChartDataMontly = (
     true
   );
   for (let i = 0; i < 12; i++) {
-    const date: Date = new Date(year, i, 1);
+    const mth = months[i]?.name;
     const newChartData: ChartData = {
-      date: date,
+      date: mth ? mth : "",
       expense: filterTransactionsByType(preFiltered, "EXPENSE").reduce(
         (a, t) =>
           isCumulative

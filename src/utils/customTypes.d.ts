@@ -7,7 +7,7 @@ export type Month = {
 };
 
 export type ChartData = {
-  date: Date;
+  date: string;
   expense: number;
   income: number;
 };

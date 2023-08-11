@@ -11,7 +11,7 @@ import {
   yearAtom,
 } from "~/utils/globalAtoms";
 import { prepareChartDataDaily, prepareChartDataMontly } from "~/utils/helpers";
-import { Line, LineChart } from "recharts";
+import { Line, LineChart, Tooltip, XAxis, YAxis } from "recharts";
 
 export default function ExpenseIncomeChart({ isYear }: { isYear?: boolean }) {
   const [chartDataDaily, setChartDataDaily] = useAtom(chartDataDailyAtom);
@@ -35,7 +35,6 @@ export default function ExpenseIncomeChart({ isYear }: { isYear?: boolean }) {
       month,
       isCumulativeDaily
     );
-    console.log("daily");
     setChartDataDaily(data);
   }, [month, year, isCumulativeDaily, transactions, categories]);
 
@@ -46,18 +45,21 @@ export default function ExpenseIncomeChart({ isYear }: { isYear?: boolean }) {
       year,
       isCumulativeMonthly
     );
-    console.log("monthly");
     setChartDataMonthly(data);
   }, [year, isCumulativeMonthly, transactions, categories]);
 
   return (
-    <div className="flex flex-col items-start justify-center">
+    <div className="flex flex-col items-start justify-center p-5">
       <LineChart
-        width={400}
+        width={800}
         height={400}
         data={isYear ? chartDataMonthly : chartDataDaily}
       >
-        <Line type="monotone" dataKey="expense" stroke="#8884d8" />
+        <Line type="monotone" dataKey="expense" stroke="#f87171" />
+        <Line type="monotone" dataKey="income" stroke="#22c55e" />
+        <XAxis dataKey="date" />
+        <YAxis />
+        <Tooltip />
       </LineChart>
     </div>
   );
