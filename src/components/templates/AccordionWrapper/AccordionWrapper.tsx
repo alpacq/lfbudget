@@ -26,7 +26,7 @@ export default function AccordionWrapper({
             </Disclosure.Button>
             {isYear ? <YearListbox /> : <MonthListbox />}
           </div>
-          <Disclosure.Panel className="flex w-full flex-row items-start justify-start gap-4 text-rose-200">
+          <Disclosure.Panel className="flex h-96 w-full flex-row items-start justify-start gap-4 text-rose-200">
             {children}
           </Disclosure.Panel>
         </>
