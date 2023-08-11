@@ -1,12 +1,9 @@
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { useAtom, useAtomValue } from "jotai";
-import {
-  categoriesAtom,
-  categoryAtomsAtom,
-} from "~/components/templates/MainDashboard/MainDashboard";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { categoriesAtom, categoryAtomsAtom } from "~/utils/globalAtoms";
 
 export default function CategoriesBar() {
   const [categoryAtoms] = useAtom(categoryAtomsAtom);

@@ -1,9 +1,9 @@
 import { Dialog, Switch } from "@headlessui/react";
 import { atom, useAtom } from "jotai";
-import { categoryModalAtom } from "~/components/organisms/ActionBar/ActionBar";
 import { Hanken_Grotesk } from "next/font/google";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
+import { categoryModalAtom } from "~/utils/globalAtoms";
 
 const savingsAtom = atom<boolean>(false);
 const nameAtom = atom<string>("");

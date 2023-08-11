@@ -1,11 +1,9 @@
-import { atom, useAtom } from "jotai";
+import { useAtom } from "jotai";
 import { Listbox } from "@headlessui/react";
 import Image from "next/image";
 import chevronDown from "~/assets/images/chevronDown.png";
-
-const years: number[] = [2021, 2022, 2023, 2024, 2025];
-
-export const yearAtom = atom<number>(new Date(Date.now()).getFullYear());
+import { yearAtom } from "~/utils/globalAtoms";
+import { years } from "~/utils/collections";
 
 export default function YearListbox() {
   const [year, setYear] = useAtom(yearAtom);

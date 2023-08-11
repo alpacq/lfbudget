@@ -1,15 +1,16 @@
-import {
-  categoriesAtom,
-  categoryAtomsAtom,
-  transactionsAtom,
-} from "~/components/templates/MainDashboard/MainDashboard";
 import { useAtomValue } from "jotai";
 import { TrashIcon } from "@heroicons/react/20/solid";
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
-import { yearAtom } from "~/components/molecules/Listbox/YearListbox";
-import { monthAtom } from "~/components/molecules/Listbox/MonthListbox";
+import { filterTransactions } from "~/utils/helpers";
+import {
+  categoriesAtom,
+  categoryAtomsAtom,
+  monthAtom,
+  transactionsAtom,
+  yearAtom,
+} from "~/utils/globalAtoms";
 
 export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
   const transactions = useAtomValue(transactionsAtom);
@@ -33,24 +34,6 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
     },
   });
 
-  const filteredTransactions = () => {
-    return categories.some((c) => c.isActive)
-      ? transactions.filter(
-          (t) =>
-            categories.find((c) => c.category.id === t.categoryId)?.isActive &&
-            (isYear
-              ? t.date.getFullYear() === year
-              : t.date.getMonth() + 1 === month?.num &&
-                t.date.getFullYear() === year)
-        )
-      : transactions.filter((t) =>
-          isYear
-            ? t.date.getFullYear() === year
-            : t.date.getMonth() + 1 === month?.num &&
-              t.date.getFullYear() === year
-        );
-  };
-
   return (
     <div className="h-max-96 flex w-1/3 flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden py-2">
       <table className="w-full table-fixed">
@@ -63,7 +46,13 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
           </tr>
         </thead>
         <tbody className="text-left text-xs font-medium text-rose-200">
-          {filteredTransactions().map((transaction) => {
+          {filterTransactions(
+            categories,
+            transactions,
+            year,
+            month,
+            isYear
+          ).map((transaction) => {
             const categoryAtom =
               categoryAtoms[
                 categories.findIndex(
@@ -110,7 +99,13 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
             <td className="py-1 pr-4" />
             <td
               className={`${
-                filteredTransactions().reduce(
+                filterTransactions(
+                  categories,
+                  transactions,
+                  year,
+                  month,
+                  isYear
+                ).reduce(
                   (a, t) =>
                     (a =
                       a + Number(t.amount) * (t.type === "EXPENSE" ? -1 : 1)),
@@ -120,7 +115,7 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
                   : "text-red-400"
               } py-1 pr-4`}
             >
-              {filteredTransactions()
+              {filterTransactions(categories, transactions, year, month, isYear)
                 .reduce(
                   (a, t) =>
                     (a =

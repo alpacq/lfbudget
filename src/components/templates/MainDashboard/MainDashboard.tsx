@@ -4,19 +4,14 @@ import ErrorScreen from "~/components/templates/ErrorScreen/ErrorScreen";
 import ActionBar from "~/components/organisms/ActionBar/ActionBar";
 import CategoriesBar from "~/components/organisms/CategoriesBar/CategoriesBar";
 import { useSession } from "next-auth/react";
-import { atom, useSetAtom } from "jotai";
-import type { Category, Transaction } from "@prisma/client";
-import { splitAtom } from "jotai/utils";
+import { useSetAtom } from "jotai";
+import type { Category } from "@prisma/client";
 import TransactionsTable from "~/components/organisms/TransactionsTable/TransactionsTable";
 import AccordionWrapper from "~/components/templates/AccordionWrapper/AccordionWrapper";
 import { useEffect } from "react";
 import ExpenseIncomeChart from "~/components/organisms/ExpenseIncomeChart/ExpenseIncomeChart";
-
-export type CategoryWithState = { category: Category; isActive: boolean };
-
-export const transactionsAtom = atom<Transaction[]>([]);
-export const categoriesAtom = atom<CategoryWithState[]>([]);
-export const categoryAtomsAtom = splitAtom(categoriesAtom);
+import { categoriesAtom, transactionsAtom } from "~/utils/globalAtoms";
+import type { CategoryWithState } from "~/utils/customTypes";
 
 export default function MainDashboard() {
   const { data: sessionData } = useSession();
@@ -33,7 +28,7 @@ export default function MainDashboard() {
 
   useEffect(() => {
     if (transactions && !isTransactionsLoading) setTransactions(transactions);
-  }, [transactions, isTransactionsLoading, setTransactions]);
+  }, [transactions, isTransactionsLoading]);
   useEffect(() => {
     if (categories && !isCategoriesLoading) {
       const categoriesWithState: CategoryWithState[] = categories.map(
@@ -43,7 +38,7 @@ export default function MainDashboard() {
       );
       setCategories(categoriesWithState);
     }
-  }, [categories, isCategoriesLoading, setCategories]);
+  }, [categories, isCategoriesLoading]);
 
   if (
     (!transactions || !categories) &&

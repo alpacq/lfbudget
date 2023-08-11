@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import type { PrimitiveAtom } from "jotai";
-import type { CategoryWithState } from "~/components/templates/MainDashboard/MainDashboard";
+import type { CategoryWithState } from "~/utils/customTypes";
 
 export default function CategoryCard({
   isSmall,

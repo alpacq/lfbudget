@@ -1,10 +1,8 @@
 import { signOut } from "next-auth/react";
-import { atom, useSetAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import NewTransactionModal from "~/components/templates/NewTransactionModal/NewTransactionModal";
 import NewCategoryModal from "~/components/templates/NewCategoryModal/NewCategoryModal";
-
-export const categoryModalAtom = atom<boolean>(false);
-export const transactionModalAtom = atom<boolean>(false);
+import { categoryModalAtom, transactionModalAtom } from "~/utils/globalAtoms";
 
 export default function ActionBar() {
   const setCategoryAtom = useSetAtom(categoryModalAtom);
