@@ -4,7 +4,7 @@ import type { TransactionType } from ".prisma/client";
 import type { ChartData } from "~/utils/customTypes";
 import { months } from "~/utils/collections";
 
-export const filterTransactions = (
+export const filterTransactionsByActiveCategory = (
   categories: CategoryWithState[],
   transactions: Transaction[],
   year: number,
@@ -28,6 +28,37 @@ export const filterTransactions = (
       );
 };
 
+export const sumTransactionsByCategory = (
+  category: CategoryWithState,
+  transactions: Transaction[],
+  year: number,
+  month: Month | undefined
+): number => {
+  return transactions
+    .filter(
+      (t) =>
+        t.categoryId === category.category.id &&
+        t.date.getFullYear() === year &&
+        t.date.getMonth() + 1 === month?.num
+    )
+    .reduce((a, t) => (a = a + Number(t.amount)), 0);
+};
+
+export const sumTransactionsBySavings = (
+  categories: CategoryWithState[],
+  transactions: Transaction[],
+  year: number,
+  isSavings: boolean
+): number => {
+  return transactions
+    .filter(
+      (t) =>
+        categories.find((c) => c.category.id === t.categoryId)?.category
+          .isSavings === isSavings && t.date.getFullYear() === year
+    )
+    .reduce((a, t) => (a = a + Number(t.amount)), 0);
+};
+
 export const filterTransactionsByType = (
   transactions: Transaction[],
   transactionType: TransactionType
@@ -43,7 +74,7 @@ export const prepareChartDataDaily = (
   isCumulative: boolean
 ) => {
   const data: ChartData[] = [];
-  const preFiltered = filterTransactions(
+  const preFiltered = filterTransactionsByActiveCategory(
     categories,
     transactions,
     year,
@@ -91,7 +122,7 @@ export const prepareChartDataMontly = (
   isCumulative: boolean
 ) => {
   const data: ChartData[] = [];
-  const preFiltered = filterTransactions(
+  const preFiltered = filterTransactionsByActiveCategory(
     categories,
     transactions,
     year,

@@ -3,7 +3,7 @@ import { TrashIcon } from "@heroicons/react/20/solid";
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
-import { filterTransactions } from "~/utils/helpers";
+import { filterTransactionsByActiveCategory } from "~/utils/helpers";
 import {
   categoriesAtom,
   categoryAtomsAtom,
@@ -46,7 +46,7 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
           </tr>
         </thead>
         <tbody className="text-left text-xs font-medium text-rose-200">
-          {filterTransactions(
+          {filterTransactionsByActiveCategory(
             categories,
             transactions,
             year,
@@ -99,7 +99,7 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
             <td className="py-1 pr-4" />
             <td
               className={`${
-                filterTransactions(
+                filterTransactionsByActiveCategory(
                   categories,
                   transactions,
                   year,
@@ -115,7 +115,13 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
                   : "text-red-400"
               } py-1 pr-4`}
             >
-              {filterTransactions(categories, transactions, year, month, isYear)
+              {filterTransactionsByActiveCategory(
+                categories,
+                transactions,
+                year,
+                month,
+                isYear
+              )
                 .reduce(
                   (a, t) =>
                     (a =

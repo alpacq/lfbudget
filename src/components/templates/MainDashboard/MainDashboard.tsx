@@ -12,6 +12,8 @@ import { useEffect } from "react";
 import ExpenseIncomeChart from "~/components/organisms/ExpenseIncomeChart/ExpenseIncomeChart";
 import { categoriesAtom, transactionsAtom } from "~/utils/globalAtoms";
 import type { CategoryWithState } from "~/utils/customTypes";
+import CategoriesMonthlyTable from "~/components/organisms/CategoriesMonthlyTable/CategoriesMonthlyTable";
+import CategoriesYearlyTable from "~/components/organisms/CategoriesYearlyTable/CategoriesYearlyTable";
 
 export default function MainDashboard() {
   const { data: sessionData } = useSession();
@@ -49,7 +51,7 @@ export default function MainDashboard() {
   if (!transactions || !categories) return <ErrorScreen />;
 
   return (
-    <div className="px-26 gap:12 flex min-h-screen w-full flex-col items-start justify-start py-12 md:gap-24 md:px-52 md:py-24">
+    <div className="px-26 flex min-h-screen w-full flex-col items-start justify-start gap-12 py-12 md:gap-24 md:px-52 md:py-24">
       <ActionBar />
       <CategoriesBar />
       <AccordionWrapper>
@@ -59,6 +61,14 @@ export default function MainDashboard() {
       <AccordionWrapper isYear>
         <ExpenseIncomeChart isYear />
         <TransactionsTable isYear />
+      </AccordionWrapper>
+      <AccordionWrapper isCategories>
+        <div className="flex w-full flex-row items-start justify-start gap-12 md:gap-24">
+          <CategoriesMonthlyTable />
+          <CategoriesMonthlyTable isSavings />
+        </div>
+        <CategoriesYearlyTable />
+        <CategoriesYearlyTable isSavings />
       </AccordionWrapper>
     </div>
   );

@@ -8,9 +8,11 @@ import YearListbox from "~/components/molecules/Listbox/YearListbox";
 export default function AccordionWrapper({
   children,
   isYear,
+  isCategories,
 }: {
   children: ReactElement | ReactNode[] | null | undefined;
   isYear?: boolean;
+  isCategories?: boolean;
 }) {
   return (
     <Disclosure as="div" className="gap-2" defaultOpen>
@@ -24,9 +26,19 @@ export default function AccordionWrapper({
                 className={`${open ? "" : "-rotate-90 transform"} h-5 w-5`}
               />
             </Disclosure.Button>
-            {isYear ? <YearListbox /> : <MonthListbox />}
+            {isCategories ? (
+              "Categories"
+            ) : isYear ? (
+              <YearListbox />
+            ) : (
+              <MonthListbox />
+            )}
           </div>
-          <Disclosure.Panel className="flex h-96 w-full flex-row items-start justify-start gap-4 text-rose-200">
+          <Disclosure.Panel
+            className={`${
+              isCategories ? "flex-col" : "flex-row"
+            } flex h-96 w-full flex-row items-start justify-start gap-4 text-rose-200`}
+          >
             {children}
           </Disclosure.Panel>
         </>

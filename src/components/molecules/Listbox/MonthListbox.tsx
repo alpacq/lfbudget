@@ -17,7 +17,7 @@ export default function MonthListbox() {
         </span>
         <Image src={chevronDown} alt="chevron" className="h-5 w-5" />
       </Listbox.Button>
-      <Listbox.Options className="absolute left-3 top-8 z-50 gap-0.5 rounded-xl bg-blue-900">
+      <Listbox.Options className="absolute left-3 top-8 z-50 w-56 gap-0.5 rounded-xl bg-blue-900">
         {months.map((mth) => (
           <Listbox.Option
             key={mth?.num}
