@@ -61,8 +61,8 @@ export default function ExpenseIncomeChart({ isYear }: { isYear?: boolean }) {
         <LineChart data={isYear ? chartDataMonthly : chartDataDaily}>
           <Line type="monotone" dataKey="expense" stroke="#f87171" />
           <Line type="monotone" dataKey="income" stroke="#22c55e" />
-          <XAxis dataKey="date" />
-          <YAxis />
+          <XAxis dataKey="date" stroke="#ffe4e6" />
+          <YAxis stroke="#ffe4e6" />
           <Tooltip />
         </LineChart>
       </ResponsiveContainer>
