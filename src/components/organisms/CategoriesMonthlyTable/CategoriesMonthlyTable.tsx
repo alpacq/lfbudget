@@ -6,7 +6,10 @@ import {
   transactionsAtom,
   yearAtom,
 } from "~/utils/globalAtoms";
-import { sumTransactionsByCategory } from "~/utils/helpers";
+import {
+  sumTransactionsByCategory,
+  sumTransactionsBySavings,
+} from "~/utils/helpers";
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 
 export default function CategoriesMonthlyTable({
@@ -19,6 +22,19 @@ export default function CategoriesMonthlyTable({
   const categoryAtoms = useAtomValue(categoryAtomsAtom);
   const month = useAtomValue(monthAtom);
   const year = useAtomValue(yearAtom);
+
+  const limitsSum = categories
+    .filter((c) => c.category.isSavings === (isSavings ? isSavings : false))
+    .reduce((a, c) => (a = a + Number(c.category.limit)), 0);
+
+  const expensesSum = sumTransactionsBySavings(
+    categories,
+    transactions,
+    year,
+    isSavings ? isSavings : false
+  );
+
+  const differenceSum = limitsSum - expensesSum;
 
   return (
     <div className="h-max-96 flex w-1/3 flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden py-2">
@@ -66,6 +82,18 @@ export default function CategoriesMonthlyTable({
                 );
               } else return null;
             })}
+          <tr>
+            <td className="w-48 py-2 pr-4">SUM</td>
+            <td className="py-2 pr-2">{limitsSum.toFixed(2)}</td>
+            <td className="py-2 pr-2">{expensesSum.toFixed(2)}</td>
+            <td
+              className={`${
+                differenceSum >= 0 ? "text-green-500" : "text-red-400"
+              } py-2 pr-2`}
+            >
+              {differenceSum.toFixed(2)}
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -36,8 +36,8 @@ export default function AccordionWrapper({
           </div>
           <Disclosure.Panel
             className={`${
-              isCategories ? "flex-col" : "flex-row"
-            } flex h-96 w-full flex-row items-start justify-start gap-4 text-rose-200`}
+              isCategories ? "flex-col" : "h-96 flex-row"
+            } flex w-full items-start justify-start gap-4 text-rose-200`}
           >
             {children}
           </Disclosure.Panel>

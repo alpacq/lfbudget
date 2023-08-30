@@ -4,6 +4,7 @@ export type Month = {
   name: string;
   num: number;
   numDays: number;
+  abbreviation: string;
 };
 
 export type ChartData = {
