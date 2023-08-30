@@ -78,14 +78,13 @@ export default function CategoriesYearlyTable({
             })}
           <tr>
             <td className="w-48 py-2 pr-4">SUM</td>
-            {monthlySums.map((mth, index) => {
-              if (monthlySums[index] !== undefined && index <= 11) {
+            {monthlySums.map((_mth, index) => {
+              const sum = monthlySums ? monthlySums[index] : 0;
+              if (sum) {
                 return (
                   <td
                     className={`${
-                      monthlySums[index] >= 0
-                        ? "text-green-500"
-                        : "text-red-400"
+                      sum >= 0 ? "text-green-500" : "text-red-400"
                     } py-2 pr-2`}
                     key={index}
                   >
