@@ -24,11 +24,15 @@ export default function CategoriesMonthlyTable({
   const year = useAtomValue(yearAtom);
 
   const limitsSum = categories
-    .filter((c) => c.category.isSavings === (isSavings ? isSavings : false))
+    .filter(
+      (c) =>
+        c.category.isSavings === (isSavings ? isSavings : false) &&
+        c.category.type === "EXPENSE"
+    )
     .reduce((a, c) => (a = a + Number(c.category.limit)), 0);
 
   const expensesSum = sumTransactionsBySavings(
-    categories,
+    categories.filter((c) => c.category.type === "EXPENSE"),
     transactions,
     year,
     isSavings ? isSavings : false
@@ -44,8 +48,10 @@ export default function CategoriesMonthlyTable({
       <table className="w-full table-fixed">
         <tbody className="text-left text-xs font-medium text-rose-200">
           {categories
-            .filter((c) =>
-              isSavings ? c.category.isSavings : !c.category.isSavings
+            .filter(
+              (c) =>
+                (isSavings ? c.category.isSavings : !c.category.isSavings) &&
+                c.category.type === "EXPENSE"
             )
             .map((c) => {
               const categoryAtom =

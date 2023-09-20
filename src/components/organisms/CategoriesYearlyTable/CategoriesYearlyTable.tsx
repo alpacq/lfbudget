@@ -91,7 +91,12 @@ export default function CategoriesYearlyTable({
                     {monthlySums[index]?.toFixed(2)}
                   </td>
                 );
-              } else return null;
+              } else
+                return (
+                  <td className="py-2 pr-2 text-green-500" key={index}>
+                    0.00
+                  </td>
+                );
             })}
           </tr>
         </tbody>

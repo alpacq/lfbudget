@@ -1,13 +1,17 @@
-import { Dialog, Switch } from "@headlessui/react";
+import { Combobox, Dialog, Switch, Transition } from "@headlessui/react";
 import { atom, useAtom } from "jotai";
 import { Hanken_Grotesk } from "next/font/google";
 import { api } from "~/utils/api";
 import toast from "react-hot-toast";
 import { categoryModalAtom } from "~/utils/globalAtoms";
+import Image from "next/image";
+import chevronDown from "~/assets/images/chevronDown.png";
+import { Fragment } from "react";
 
 const savingsAtom = atom<boolean>(false);
 const nameAtom = atom<string>("");
 const limitAtom = atom<string>("0");
+const typeAtom = atom<string>("Expense");
 
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
@@ -17,9 +21,11 @@ const hanken = Hanken_Grotesk({
 
 const NewCategoryModal = () => {
   const [isOpen, setIsOpen] = useAtom(categoryModalAtom);
+  const [transactionType, setTransactionType] = useAtom(typeAtom);
   const [isSavings, setIsSavings] = useAtom(savingsAtom);
   const [name, setName] = useAtom(nameAtom);
   const [limit, setLimit] = useAtom(limitAtom);
+  const transactionTypes: string[] = ["Expense", "Income"];
   const ctx = api.useContext();
 
   const { mutate } = api.categories.create.useMutation({
@@ -28,6 +34,7 @@ const NewCategoryModal = () => {
       setName("");
       setIsSavings(false);
       setLimit("0");
+      setTransactionType("Expense");
       void ctx.categories.getByUser.invalidate();
     },
     onError: (e) => {
@@ -57,7 +64,42 @@ const NewCategoryModal = () => {
             New category
           </Dialog.Title>
           <div className="flex w-full flex-col items-center justify-center gap-3">
-            <div className="grid w-full grid-cols-3 grid-rows-3 items-center gap-5 p-0">
+            <div className="grid w-full grid-cols-3 grid-rows-4 items-center gap-5 p-0">
+              <label className="text-left text-base font-medium text-rose-200">
+                Type
+              </label>
+              <Combobox value={transactionType} onChange={setTransactionType}>
+                <div className="relative col-span-2 rounded-xl border border-rose-200 bg-transparent p-2 text-left text-base font-medium text-rose-200 outline-0">
+                  <div className="relative">
+                    <Combobox.Input className="w-full bg-transparent outline-0" />
+                    <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                      <Image src={chevronDown} alt="chevron down" />
+                    </Combobox.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Combobox.Options className="absolute -left-0.5 w-full gap-2 rounded-xl border border-rose-200 bg-indigo-900 p-2 text-left text-base font-medium text-rose-200 outline-0">
+                      {transactionTypes.map((tp) => (
+                        <Combobox.Option
+                          key={tp}
+                          className={({ active }) =>
+                            `relative cursor-pointer select-none bg-transparent p-2 text-left text-base font-medium outline-0 ${
+                              active ? "text-rose-300" : "text-rose-200"
+                            }`
+                          }
+                          value={tp}
+                        >
+                          {tp}
+                        </Combobox.Option>
+                      ))}
+                    </Combobox.Options>
+                  </Transition>
+                </div>
+              </Combobox>
               <label className="text-left text-base font-medium text-rose-200">
                 Name
               </label>
@@ -100,6 +142,7 @@ const NewCategoryModal = () => {
                   isSavings,
                   name,
                   limit: parseFloat(limit.replace(",", ".")),
+                  transactionType,
                 })
               }
             >

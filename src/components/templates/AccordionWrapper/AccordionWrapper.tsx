@@ -18,7 +18,7 @@ export default function AccordionWrapper({
     <Disclosure as="div" className="gap-2" defaultOpen>
       {({ open }) => (
         <>
-          <div className="relative flex w-full flex-row items-center justify-start gap-2 text-left text-2xl font-black text-rose-200">
+          <div className="relative flex w-full flex-row items-center justify-start gap-2 pb-2 text-left text-2xl font-black text-rose-200">
             <Disclosure.Button className="flex w-fit flex-row items-center justify-start gap-2 text-left text-2xl font-black text-rose-200">
               <Image
                 src={chevronDown}

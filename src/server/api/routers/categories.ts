@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { TransactionType } from ".prisma/client";
 
 export const categoriesRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
@@ -21,6 +22,7 @@ export const categoriesRouter = createTRPCRouter({
         isSavings: z.boolean(),
         limit: z.number(),
         name: z.string(),
+        transactionType: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -31,6 +33,10 @@ export const categoriesRouter = createTRPCRouter({
           isSavings: input.isSavings,
           limit: input.limit,
           name: input.name,
+          type:
+            input.transactionType === "Expense"
+              ? TransactionType.EXPENSE
+              : TransactionType.INCOME,
         },
       });
 

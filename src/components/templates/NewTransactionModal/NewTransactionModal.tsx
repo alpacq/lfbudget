@@ -63,7 +63,7 @@ const NewTransactionModal = () => {
       className="relative z-50"
     >
       <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-      <div className="fixed inset-0 flex w-full items-center justify-center gap-8 p-4">
+      <div className="inset-y fixed inset-x-0 top-36 flex w-full items-center justify-center gap-8 p-4">
         {/* The actual dialog panel  */}
         <Dialog.Panel
           className={`${hanken.variable} mx-auto flex h-fit w-3/12 flex-col items-center justify-center gap-8 rounded-2xl bg-indigo-900 p-8 font-sans shadow-md`}
@@ -150,19 +150,25 @@ const NewTransactionModal = () => {
                     leaveTo="opacity-0"
                   >
                     <Combobox.Options className="absolute -left-0.5 z-10 w-full gap-2 rounded-xl border border-rose-200 bg-indigo-900 p-2 text-left text-base font-medium text-rose-200 outline-0">
-                      {categories.map((cat) => (
-                        <Combobox.Option
-                          key={cat.category.id}
-                          className={({ active }) =>
-                            `relative cursor-pointer select-none bg-transparent p-2 text-left text-base font-medium outline-0 ${
-                              active ? "text-rose-300" : "text-rose-200"
-                            }`
-                          }
-                          value={cat}
-                        >
-                          {cat.category.name}
-                        </Combobox.Option>
-                      ))}
+                      {categories
+                        .filter((cat) =>
+                          transactionType === "Expense"
+                            ? cat.category.type === "EXPENSE"
+                            : cat.category.type === "INCOME"
+                        )
+                        .map((cat) => (
+                          <Combobox.Option
+                            key={cat.category.id}
+                            className={({ active }) =>
+                              `relative cursor-pointer select-none bg-transparent p-2 text-left text-base font-medium outline-0 ${
+                                active ? "text-rose-300" : "text-rose-200"
+                              }`
+                            }
+                            value={cat}
+                          >
+                            {cat.category.name}
+                          </Combobox.Option>
+                        ))}
                     </Combobox.Options>
                   </Transition>
                 </div>
