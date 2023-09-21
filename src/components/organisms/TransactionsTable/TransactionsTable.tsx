@@ -35,8 +35,8 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
   });
 
   return (
-    <div className="h-max-96 flex w-1/3 flex-col items-center justify-center gap-2 overflow-y-auto overflow-x-hidden py-2">
-      <table className="w-full table-fixed">
+    <div className="flex max-h-96 w-1/3 flex-col items-center justify-start gap-2 overflow-y-auto overflow-x-hidden py-2">
+      <table className="w-full table-fixed p-2">
         <thead className="w-full text-left text-base font-medium text-rose-200">
           <tr>
             <th className="w-1/3 py-2 pr-4">Transaction</th>
@@ -45,7 +45,7 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
             <th className="w-1/6 py-2 pr-2"></th>
           </tr>
         </thead>
-        <tbody className="text-left text-xs font-medium text-rose-200">
+        <tbody className="w-full text-left text-xs font-medium text-rose-200">
           {filterTransactionsByActiveCategory(
             categories,
             transactions,

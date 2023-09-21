@@ -35,6 +35,7 @@ export default function CategoriesMonthlyTable({
     categories.filter((c) => c.category.type === "EXPENSE"),
     transactions,
     year,
+    month,
     isSavings ? isSavings : false
   );
 

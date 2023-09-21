@@ -48,13 +48,16 @@ export const sumTransactionsBySavings = (
   categories: CategoryWithState[],
   transactions: Transaction[],
   year: number,
+  month: Month | undefined,
   isSavings: boolean
 ): number => {
   return transactions
     .filter(
       (t) =>
         categories.find((c) => c.category.id === t.categoryId)?.category
-          .isSavings === isSavings && t.date.getFullYear() === year
+          .isSavings === isSavings &&
+        t.date.getFullYear() === year &&
+        t.date.getMonth() + 1 === month?.num
     )
     .reduce((a, t) => (a = a + Number(t.amount)), 0);
 };
