@@ -11,8 +11,10 @@ import { months } from "~/utils/collections";
 
 export default function CategoriesYearlyTable({
   isSavings,
+  isIncome,
 }: {
   isSavings?: boolean;
+  isIncome?: boolean;
 }) {
   const transactions = useAtomValue(transactionsAtom);
   const categories = useAtomValue(categoriesAtom);
@@ -23,7 +25,8 @@ export default function CategoriesYearlyTable({
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 overflow-hidden py-2">
       <h5 className="w-full text-left text-xs font-medium text-rose-200">
-        Categories - {isSavings ? "savings" : "daily"} - monthly
+        Categories - {isSavings ? "savings" : isIncome ? "incomes" : "daily"} -
+        monthly
       </h5>
       <table className="w-full table-fixed">
         <tbody className="text-left text-xs font-medium text-rose-200">
@@ -36,8 +39,12 @@ export default function CategoriesYearlyTable({
             ))}
           </tr>
           {categories
-            .filter((c) =>
-              isSavings ? c.category.isSavings : !c.category.isSavings
+            .filter(
+              (c) =>
+                (isSavings ? c.category.isSavings : !c.category.isSavings) &&
+                (isIncome
+                  ? c.category.type === "INCOME"
+                  : c.category.type === "EXPENSE")
             )
             .map((c) => {
               const categoryAtom =
@@ -59,7 +66,10 @@ export default function CategoriesYearlyTable({
                         year,
                         mth
                       );
-                      const diff = Number(c.category.limit) - sum;
+                      const diff =
+                        c.category.type === "EXPENSE"
+                          ? Number(c.category.limit) - sum
+                          : sum;
                       monthlySums[index] += diff;
                       return (
                         <td

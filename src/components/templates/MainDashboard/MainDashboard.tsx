@@ -69,6 +69,7 @@ export default function MainDashboard() {
         </div>
         <CategoriesYearlyTable />
         <CategoriesYearlyTable isSavings />
+        <CategoriesYearlyTable isIncome />
       </AccordionWrapper>
     </div>
   );
