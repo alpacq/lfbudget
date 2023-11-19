@@ -37,6 +37,7 @@ export default function CategoriesYearlyTable({
                 {mth.abbreviation}
               </td>
             ))}
+            <td className="py-1 pr-2">SUM</td>
           </tr>
           {categories
             .filter(
@@ -54,6 +55,7 @@ export default function CategoriesYearlyTable({
                   )
                 ];
               if (categoryAtom) {
+                let categorySum = 0;
                 return (
                   <tr key={c.category.id}>
                     <td className="w-48 py-1 pr-4">
@@ -71,6 +73,7 @@ export default function CategoriesYearlyTable({
                           ? Number(c.category.limit) - sum
                           : sum;
                       monthlySums[index] += diff;
+                      categorySum += diff;
                       return (
                         <td
                           key={index}
@@ -82,6 +85,13 @@ export default function CategoriesYearlyTable({
                         </td>
                       );
                     })}
+                    <td
+                      className={`${
+                        categorySum >= 0 ? "text-green-500" : "text-red-400"
+                      } py-1 pr-2`}
+                    >
+                      {categorySum.toFixed(2)}
+                    </td>
                   </tr>
                 );
               } else return null;
@@ -108,6 +118,15 @@ export default function CategoriesYearlyTable({
                   </td>
                 );
             })}
+            <td
+              className={`${
+                monthlySums.reduce((a, t) => (a = a + t)) >= 0
+                  ? "text-green-500"
+                  : "text-red-400"
+              } py-2 pr-2`}
+            >
+              {monthlySums.reduce((a, t) => (a = a + t)).toFixed(2)}
+            </td>
           </tr>
         </tbody>
       </table>
