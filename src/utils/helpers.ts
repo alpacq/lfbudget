@@ -28,6 +28,16 @@ export const filterTransactionsByActiveCategory = (
       );
 };
 
+export const sortTransactionsByDate = (
+    transactions: Transaction[],
+): Transaction[] => {
+  return transactions.sort((a, b) => {
+    if (a.date < b.date) return -1;
+    if (a.date > b.date) return 1;
+    return 0;
+  });
+}
+
 export const sumTransactionsByCategory = (
   category: CategoryWithState,
   transactions: Transaction[],

@@ -20,10 +20,10 @@ export default function CategoryCard({
         }));
       }}
       className={`${
-        isSmall ? "text-xs font-medium" : "text-xl font-semibold"
+        isSmall ? "text-xs font-medium px-2" : "text-xl font-semibold px-4"
       } ${
         category.isActive && !isSmall ? "bg-rose-400" : "bg-rose-300"
-      } flex h-fit w-fit cursor-pointer items-center justify-center gap-4 rounded-2xl px-4 py-1 text-left text-indigo-900 shadow-md`}
+      } flex h-fit w-fit cursor-pointer items-center justify-center gap-4 rounded-2xl py-1 text-left text-indigo-900 shadow-md`}
     >
       {category.category.name}
     </div>
