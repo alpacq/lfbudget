@@ -1,4 +1,4 @@
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { TrashIcon } from "@heroicons/react/20/solid";
 import CategoryCard from "~/components/molecules/CategoryCard/CategoryCard";
 import { api } from "~/utils/api";
@@ -10,6 +10,8 @@ import {
 import {
   categoriesAtom,
   categoryAtomsAtom,
+  editTransactionAtom,
+  editTransactionModalAtom,
   monthAtom,
   transactionsAtom,
   yearAtom,
@@ -19,6 +21,8 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
   const transactions = useAtomValue(transactionsAtom);
   const categories = useAtomValue(categoriesAtom);
   const categoryAtoms = useAtomValue(categoryAtomsAtom);
+  const setEditTransaction = useSetAtom(editTransactionAtom);
+  const setEditTransactionModal = useSetAtom(editTransactionModalAtom);
   const year = useAtomValue(yearAtom);
   const month = useAtomValue(monthAtom);
   const ctx = api.useContext();
@@ -67,7 +71,14 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
             const amount = transaction.amount.toString();
             if (categoryAtom) {
               return (
-                <tr key={transaction.id} className="has-tooltip static">
+                <tr
+                  key={transaction.id}
+                  className="has-tooltip static cursor-pointer"
+                  onClick={() => {
+                    setEditTransaction(transaction);
+                    setEditTransactionModal(true);
+                  }}
+                >
                   <td className="py-1 pr-2">
                     <span className="tooltip -mt-7 ml-6 rounded bg-indigo-700 p-2 text-rose-200 shadow-lg">
                       {transaction.date.toDateString()}

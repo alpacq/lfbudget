@@ -18,3 +18,5 @@ export const chartDataDailyAtom = atom<ChartData[]>([]);
 export const chartDataMonthlyAtom = atom<ChartData[]>([]);
 export const isCumulativeDailyAtom = atom<boolean>(true);
 export const isCumulativeMonthlyAtom = atom<boolean>(false);
+export const editTransactionModalAtom = atom<boolean>(false);
+export const editTransactionAtom = atom<Transaction | null>(null);

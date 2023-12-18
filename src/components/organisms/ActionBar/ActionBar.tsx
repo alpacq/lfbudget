@@ -3,6 +3,7 @@ import { useSetAtom } from "jotai";
 import NewTransactionModal from "~/components/templates/NewTransactionModal/NewTransactionModal";
 import NewCategoryModal from "~/components/templates/NewCategoryModal/NewCategoryModal";
 import { categoryModalAtom, transactionModalAtom } from "~/utils/globalAtoms";
+import EditTransactionModal from "~/components/templates/EditTransactionModal/EditTransactionModal";
 
 export default function ActionBar() {
   const setCategoryAtom = useSetAtom(categoryModalAtom);
@@ -35,6 +36,7 @@ export default function ActionBar() {
       </div>
       <NewTransactionModal />
       <NewCategoryModal />
+      <EditTransactionModal />
     </div>
   );
 }

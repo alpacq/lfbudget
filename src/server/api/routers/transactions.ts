@@ -47,6 +47,39 @@ export const transactionsRouter = createTRPCRouter({
       return transaction;
     }),
 
+  edit: protectedProcedure
+    .input(
+      z.object({
+        transactionId: z.string(),
+        categoryId: z.string(),
+        isReturnable: z.boolean(),
+        amount: z.number(),
+        description: z.string(),
+        transactionType: z.string(),
+        date: z.date(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const transaction = await ctx.prisma.transaction.update({
+        where: { id: input.transactionId },
+        data: {
+          userId,
+          categoryId: input.categoryId,
+          isReturnable: input.isReturnable,
+          amount: input.amount,
+          description: input.description,
+          type:
+            input.transactionType === "Expense"
+              ? TransactionType.EXPENSE
+              : TransactionType.INCOME,
+          date: input.date,
+        },
+      });
+
+      return transaction;
+    }),
+
   delete: protectedProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
