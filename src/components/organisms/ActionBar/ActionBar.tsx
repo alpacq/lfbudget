@@ -12,7 +12,7 @@ export default function ActionBar() {
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <h2 className="text-left text-4xl font-black text-rose-200">
-        Lam's Family Budget App
+        Lam&apos;s Family Budget App
       </h2>
       <div className="flex flex-row items-center justify-center gap-6">
         <button
