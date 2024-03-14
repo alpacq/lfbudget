@@ -6,9 +6,8 @@ import "~/styles/globals.css";
 import { Hanken_Grotesk } from "next/font/google";
 
 const hanken = Hanken_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-hanken',
+  subsets: ["latin"],
+  variable: "--font-hanken",
 });
 
 const MyApp: AppType<{ session: Session | null }> = ({
