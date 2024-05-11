@@ -74,12 +74,14 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
                 <tr
                   key={transaction.id}
                   className="has-tooltip static cursor-pointer"
-                  onClick={() => {
-                    setEditTransaction(transaction);
-                    setEditTransactionModal(true);
-                  }}
                 >
-                  <td className="py-1 pr-2">
+                  <td
+                    className="py-1 pr-2"
+                    onClick={() => {
+                      setEditTransaction(transaction);
+                      setEditTransactionModal(true);
+                    }}
+                  >
                     <span className="tooltip -mt-7 ml-6 rounded bg-indigo-700 p-2 text-rose-200 shadow-lg">
                       {transaction.date.toDateString()}
                     </span>
@@ -94,6 +96,10 @@ export default function TransactionsTable({ isYear }: { isYear?: boolean }) {
                         ? "text-red-400"
                         : "text-green-500"
                     } has-tooltip py-1 pr-4`}
+                    onClick={() => {
+                      setEditTransaction(transaction);
+                      setEditTransactionModal(true);
+                    }}
                   >
                     {transaction.type === "EXPENSE" ? "-" : "+"}
                     {amount.includes(".") ? amount : amount + ".00"}
