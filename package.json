@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^3.3.3",
     "@headlessui/react": "^0.0.0-insiders.01a34cb",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
